@@ -1,0 +1,5 @@
+node_modules/
+dist/
+apiguardian-report/
+.claude/worktrees/
+.apiguardian/

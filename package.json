@@ -1,0 +1,44 @@
+{
+  "name": "apiguardian",
+  "version": "0.1.0",
+  "description": "Agent orchestration that compares two versions of API docs (Swagger/OpenAPI or Markdown), documents what changed and how, and lists what could fail.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p backend/tsconfig.build.json && vite build --config frontend/vite.config.ts",
+    "typecheck": "tsc --noEmit -p backend && tsc --noEmit -p frontend",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev": "tsx backend/src/cli.ts",
+    "build:web": "vite build --config frontend/vite.config.ts",
+    "dev:web": "vite --config frontend/vite.config.ts",
+    "build:demo": "vite build --config frontend/vite.config.ts --mode demo",
+    "dev:demo": "vite --config frontend/vite.config.ts --mode demo",
+    "demo:export": "tsx backend/scripts/export-demo.ts",
+    "serve": "tsx backend/src/cli.ts serve"
+  },
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
+    "@apidevtools/swagger-parser": "^13.1.0",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
+  },
+  "bin": {
+    "apiguardian": "dist/cli.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

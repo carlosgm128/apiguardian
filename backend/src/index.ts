@@ -1,0 +1,14 @@
+export { compareDocs, diffFiles, detectFormat } from "./orchestrator.js";
+export type { CompareOptions, ComparisonReport } from "./orchestrator.js";
+export { EventLog } from "./events.js";
+export type { AgentEvent, LlmUsage, RunEvent, RunEventBody } from "./events.js";
+export { ClaudeBackend } from "./agents/claude.js";
+export { SimulatedBackend } from "./agents/simulated.js";
+export type { AgentBackend, AgentContext, Investigate, SynthesisInput } from "./agents/backend.js";
+export type { RiskReport, UnitAnalysis } from "./agents/schemas.js";
+export { renderMarkdownReport } from "./report/markdown.js";
+export { RunManager, summarize } from "./server/runs.js";
+export type { RunConfig, RunMeta, RunMode, RunStatus, RunSummary, Sample } from "./server/runs.js";
+export { startDashboardServer } from "./server/http.js";
+export type { DashboardServer, DashboardServerOptions } from "./server/http.js";
+export type * from "./types.js";

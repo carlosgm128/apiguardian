@@ -1,0 +1,29 @@
+/* Demo mode only (imported by DemoChrome). */
+.demo-banner { display: flex; align-items: center; gap: 10px; padding: 6px 16px; font-size: 13px; background: var(--surface-2); border-bottom: 1px solid var(--border); color: var(--ink-2); }
+.demo-banner .spacer { flex: 1; }
+.demo-badge { font-weight: 700; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; background: var(--accent); color: #fff; }
+
+.demo-tour { position: fixed; right: 16px; bottom: 16px; width: min(380px, calc(100vw - 32px)); max-height: calc(100vh - 140px); overflow: auto; padding: 14px 16px; z-index: 20; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18); }
+.demo-tour h3 { margin: 4px 0 6px; font-size: 16px; text-transform: none; letter-spacing: normal; color: var(--ink); }
+/* Room to scroll controls out from under the tour panel. */
+body.demo-tour-open .content { padding-bottom: 340px; }
+.demo-tour p { margin: 6px 0; line-height: 1.45; }
+.demo-tour-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.demo-tour-title { margin: 8px 0 0; }
+.demo-tour-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+.demo-tour-pick { display: grid; gap: 2px; width: 100%; text-align: left; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: inherit; cursor: pointer; font: inherit; }
+.demo-tour-pick:hover { background: var(--surface-2); border-color: var(--accent); }
+.demo-tour-actions { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+.demo-tour-actions .spacer { flex: 1; }
+
+.demo-notices { position: fixed; top: 92px; right: 16px; width: min(360px, calc(100vw - 32px)); display: grid; gap: 8px; z-index: 21; }
+.demo-notice { padding: 10px 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14); border-left: 3px solid var(--accent); }
+.demo-notice.notification { border-left-style: double; border-left-width: 4px; }
+.demo-notice p { margin: 4px 0; }
+.demo-payload { margin: 6px 0 0; max-height: 260px; overflow: auto; font-family: var(--mono); font-size: 11px; white-space: pre-wrap; word-break: break-word; background: var(--surface-2); padding: 8px; border-radius: 6px; }
+
+.demo-highlight { outline: 3px solid var(--accent) !important; outline-offset: 3px; border-radius: 6px; animation: demo-pulse 1.4s ease-in-out infinite; }
+@keyframes demo-pulse { 50% { outline-color: transparent; } }
+@media (prefers-reduced-motion: reduce) { .demo-highlight { animation: none; } }
+.demo-short { display: none; }
+@media (max-width: 640px) { .demo-long { display: none; } .demo-short { display: inline; } }

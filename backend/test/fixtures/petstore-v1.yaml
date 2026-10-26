@@ -1,0 +1,86 @@
+swagger: "2.0"
+info:
+  title: Petstore
+  version: 1.0.0
+host: api.example.com
+basePath: /v1
+schemes: [https]
+consumes: [application/json]
+produces: [application/json]
+paths:
+  /pets:
+    get:
+      operationId: listPets
+      summary: List pets
+      parameters:
+        - name: limit
+          in: query
+          type: integer
+          maximum: 100
+          description: Max items to return
+      responses:
+        "200":
+          description: A list of pets
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Pet"
+    post:
+      operationId: createPet
+      summary: Create a pet
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/NewPet"
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: "#/definitions/Pet"
+  /pets/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+    get:
+      operationId: getPet
+      summary: Get a pet
+      responses:
+        "200":
+          description: The pet
+          schema:
+            $ref: "#/definitions/Pet"
+        "404":
+          description: Not found
+    delete:
+      operationId: deletePet
+      summary: Delete a pet
+      responses:
+        "204":
+          description: Deleted
+definitions:
+  NewPet:
+    type: object
+    required: [name]
+    properties:
+      name:
+        type: string
+      tag:
+        type: string
+  Pet:
+    allOf:
+      - $ref: "#/definitions/NewPet"
+      - type: object
+        required: [id, status]
+        properties:
+          id:
+            type: string
+          status:
+            type: string
+            enum: [available, pending, sold]
+          weight:
+            type: number
+            description: Weight in kilograms

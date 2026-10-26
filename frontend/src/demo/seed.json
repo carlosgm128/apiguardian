@@ -1,0 +1,75 @@
+{
+  "_comment": "Demo-only applications and channels. Read by the in-browser mock (frontend/src/demo/server.ts) and by backend/scripts/export-demo.ts, which precomputes their report summaries and notification payloads with the real backend code. Nothing here is ever sent anywhere.",
+  "channels": [
+    {
+      "id": "api-alerts",
+      "name": "#api-alerts",
+      "type": "slack",
+      "url": "https://hooks.slack.com/services/T0DEMO/B0DEMO/demo",
+      "enabled": true,
+      "createdAt": "2026-10-19T09:00:00.000Z"
+    },
+    {
+      "id": "mobile-team",
+      "name": "Mobile team",
+      "type": "teams",
+      "url": "https://acme.webhook.office.com/workflows/demo",
+      "enabled": true,
+      "createdAt": "2026-10-19T09:05:00.000Z"
+    },
+    {
+      "id": "owner-portal-ci",
+      "name": "owner-portal CI",
+      "type": "github",
+      "url": "https://api.github.com/repos/acme/owner-portal/dispatches",
+      "token": "demo",
+      "eventType": "api-breaking-change",
+      "enabled": true,
+      "createdAt": "2026-10-19T09:10:00.000Z"
+    },
+    {
+      "id": "ops-webhook",
+      "name": "Ops webhook",
+      "type": "webhook",
+      "url": "https://ops.acme.example/hooks/apiguardian",
+      "secret": "demo",
+      "enabled": true,
+      "createdAt": "2026-10-19T09:15:00.000Z"
+    }
+  ],
+  "applications": [
+    {
+      "id": "owner-portal",
+      "name": "Owner portal",
+      "description": "Lets pet owners see their pets and contact details.",
+      "owner": "Customer team",
+      "contact": "#owner-portal",
+      "dependencies": [{ "apiId": "petstore", "operations": ["GET /owners", "GET /pets/{}"] }],
+      "channelIds": ["api-alerts", "owner-portal-ci"],
+      "minSeverity": "breaking",
+      "createdAt": "2026-10-19T10:00:00.000Z"
+    },
+    {
+      "id": "mobile-app",
+      "name": "Mobile app",
+      "description": "iOS and Android clients; uses the whole API.",
+      "owner": "Mobile team",
+      "contact": "mobile@acme.example",
+      "dependencies": [{ "apiId": "petstore", "operations": "all" }],
+      "channelIds": ["mobile-team"],
+      "minSeverity": "warning",
+      "createdAt": "2026-10-19T10:05:00.000Z"
+    },
+    {
+      "id": "storefront-web",
+      "name": "Storefront web",
+      "description": "Public catalogue and checkout.",
+      "owner": "Web team",
+      "contact": "#storefront",
+      "dependencies": [{ "apiId": "petstore", "operations": ["GET /pets", "GET /pets/{}", "POST /pets"] }],
+      "channelIds": ["api-alerts", "ops-webhook"],
+      "minSeverity": "breaking",
+      "createdAt": "2026-10-19T10:10:00.000Z"
+    }
+  ]
+}
