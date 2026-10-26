@@ -201,6 +201,7 @@ Applications consume tracked APIs. When a tracked API gets a new version, every 
   - **Check now:** reveals the third recorded Petstore version and replays `tracker-2`. Impacts and "deliveries" (nothing is sent) follow the same rules as `AppService.onRunFinished`.
   - **Tours:** in `demo/tours.ts`. They highlight controls by their visible text, so renaming a button can break a step.
   - **Tests:** `frontend/test/demo-server.test.ts` drives `DemoServer` with fake timers.
+  - **Hosting:** `vercel.json` deploys `dist/demo` as a static site (`npm run build:demo`). The demo must keep relative paths (`base: "./"`) and hash routing so it works from any host without rewrites. Never deploy the real dashboard publicly: the server only accepts loopback.
 - **Simulated backend:** `SimulatedBackend` (`--simulate`, or "Simulated" in the dashboard) fakes worker and lead behavior: delays, token counts, prompts and outputs, one investigation, optional failures (`failureRate`), and abort support. Use it for UI work without API credentials. Simulated runs are flagged in report.md and in the UI.
 
 ## Testing notes

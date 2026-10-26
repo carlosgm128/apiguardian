@@ -147,6 +147,15 @@ A **Guided tours** panel walks through five workflows:
 
 Everything else works too: create applications and channels, rerun any run, compare versions. State is in memory and resets on reload. Claude runs and uploaded files aren't available, because there are no recordings for them.
 
+### Deploy to Vercel
+
+`vercel.json` deploys the demo as a static site: it runs `npm ci` and `npm run build:demo` and serves `dist/demo`. Hashed files in `assets/` are cached for a year. Routing lives in the URL hash, so no rewrites are needed.
+
+- **From Git:** import the repository in Vercel and leave the project settings at their defaults (root directory `./`); `vercel.json` sets the rest.
+- **From the CLI:** `npx vercel` for a preview, `npx vercel --prod` for production.
+
+Only the demo is deployed. The real dashboard needs `apiguardian serve`, which only accepts loopback connections.
+
 The recordings live in `frontend/src/demo/recording.json`. To refresh them with your own runs, put the run directories (from `serve`'s runs dir, or from `compare --out`) and a tracked API directory in one folder, as described at the top of `backend/scripts/export-demo.ts`, then run `npm run demo:export -- <folder>`.
 
 ## Tracking a live API
