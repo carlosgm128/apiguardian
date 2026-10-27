@@ -3,6 +3,7 @@ import { existsSync } from "node:fs";
 import { appendFile, mkdir, readdir, readFile, rm, writeFile, chmod } from "node:fs/promises";
 import { join } from "node:path";
 import type { RunConfig, RunManager } from "../server/runs.js";
+import { summarizeMonitoring, type MonitoringReport } from "./monitoring.js";
 import { discoverSpec, fetchSpec, SpecFetchError, type SpecSummary } from "./spec.js";
 
 // Tracks live APIs: fetches each one's spec on a schedule (or on demand),
@@ -91,6 +92,7 @@ export interface ApiTrackerOptions {
 export class ApiTracker {
   private readonly apis = new Map<string, ApiState>();
   private timer?: NodeJS.Timeout;
+  private tickMs?: number;
   private readonly now: () => number;
 
   constructor(private readonly options: ApiTrackerOptions) {
@@ -229,6 +231,14 @@ export class ApiTracker {
     return lines.slice(-limit).reverse().map((l) => JSON.parse(l) as CheckRecord);
   }
 
+  /** Check history and schedule across every tracked API (the Monitoring page). */
+  async monitoring(days = 7, limit = 200): Promise<MonitoringReport> {
+    const apis = await Promise.all(
+      [...this.apis.values()].map(async ({ api, versions }) => ({ api, versions: versions.length, checks: await this.checks(api.id, Number.MAX_SAFE_INTEGER) })),
+    );
+    return summarizeMonitoring(apis, { now: this.now(), days, limit, scheduler: { running: this.timer !== undefined, tickMs: this.tickMs } });
+  }
+
   /** Checks every enabled API whose interval has elapsed. */
   async tick(): Promise<CheckRecord[]> {
     const due = [...this.apis.values()].filter(({ api }) => {
@@ -242,6 +252,7 @@ export class ApiTracker {
     this.stopScheduler();
     const run = () => void this.tick().catch(() => {});
     this.timer = setInterval(run, everyMs);
+    this.tickMs = everyMs;
     this.timer.unref();
     run();
   }
@@ -249,6 +260,7 @@ export class ApiTracker {
   stopScheduler() {
     if (this.timer) clearInterval(this.timer);
     this.timer = undefined;
+    this.tickMs = undefined;
   }
 
   // ---- internals -------------------------------------------------------------
@@ -346,6 +358,8 @@ export class ApiTracker {
     await writeFile(join(this.apiDir(id), "versions.json"), JSON.stringify(this.require(id).versions, null, 2));
   }
 }
+
+export type { MonitoringApi, MonitoringCheck, MonitoringReport } from "./monitoring.js";
 
 export class UnknownApiError extends Error {}
 

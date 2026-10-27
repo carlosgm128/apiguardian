@@ -103,6 +103,7 @@ Useful options:
 apiguardian serve          # http://127.0.0.1:4319
 ```
 
+- **Monitoring** (home page): the scheduled checks across all tracked APIs. Shows what is due next, checks per day (unchanged, new version, failed), per-API stats and a filterable check log (see [Monitoring](#monitoring)).
 - **Runs:** every run with its status, mode, duration, breaking-change count, LLM calls, tokens and estimated cost.
 - **New run:** use a sample or upload two files, then pick the agents, models, effort, concurrency and GPU placement. Running runs can be cancelled.
 - **Run view:**
@@ -178,6 +179,17 @@ Checks run while `apiguardian serve` is running. If the server isn't always up, 
 ```bash
 */30 * * * * cd /path/to/apiguardian && apiguardian check-apis
 ```
+
+### Monitoring
+
+The **Monitoring** page is the dashboard's home page. It shows the recurring checks of every tracked API in one place. It refreshes every 10 seconds.
+
+- **Overview:** tracked and paused APIs, checks and new versions in the chosen window (today, 7, 30 or 90 days), failed checks with the failure rate, and the next scheduled check.
+- **Checks per day:** a bar per day (UTC), split into unchanged, new version and failed. Failed checks are also hatched. Hover a bar for its numbers.
+- **Schedule:** every API with its last result, interval, last check, a countdown to the next check, version count, last change, and its checks, failures and average fetch time in the window. A check that is more than two scheduler ticks late is flagged **Overdue**. If the server runs with `--no-scheduler`, the page says so.
+- **Check log:** every check, newest first, filterable by API and by result (new versions, failures). A new version links to its report, and a failure shows its error.
+
+Data comes from `GET /api/monitoring?days=7`, built from each API's `checks.jsonl`. Checks run by `check-apis` from cron show up too.
 
 Tracked APIs are stored in `.apiguardian/apis/` (change it with `--apis-dir`) and runs in `.apiguardian/runs/` (change it with `--runs-dir`).
 

@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import seed from "../src/demo/seed.json";
 import { DemoServer, type DemoNotice } from "../src/demo/server";
 import type { DemoRecording, DemoSeed } from "../src/demo/types";
-import type { CheckRecord, Delivery, ImpactRecord, RunEvent, RunMeta } from "../src/types";
+import type { CheckRecord, Delivery, ImpactRecord, MonitoringReport, RunEvent, RunMeta } from "../src/types";
 
 const recording = JSON.parse(readFileSync(new URL("../src/demo/recording.json", import.meta.url), "utf8")) as DemoRecording;
 
@@ -36,6 +36,18 @@ async function finish(id: string): Promise<RunMeta> {
 const leadFailedId = recording.runs["lead-failed"].meta.id;
 
 describe("demo server", () => {
+  it("has a week of scheduled checks for the Monitoring page", async () => {
+    const week = await call<MonitoringReport>("GET", "/api/monitoring?days=7");
+    const [petstore] = week.apis;
+    expect(petstore).toMatchObject({ enabled: true, intervalMinutes: 60, lastOutcome: "unchanged", stats: { baseline: 1, changed: 1 } });
+    expect(petstore!.stats.unchanged).toBeGreaterThan(100);
+    expect(petstore!.stats.error).toBeGreaterThan(0);
+    expect(week.daily.reduce((n, d) => n + d.unchanged + d.changed + d.baseline + d.error, 0)).toBe(week.totalChecks);
+    const check = await call<CheckRecord>("POST", `/api/apis/${petstore!.id}/check`);
+    const after = await call<MonitoringReport>("GET", "/api/monitoring?days=1");
+    expect(after.checks[0]).toMatchObject({ at: check.at, outcome: "changed", apiId: petstore!.id });
+  });
+
   it("starts with a few days of recorded history", async () => {
     const runs = await call<RunMeta[]>("GET", "/api/runs");
     expect(runs.map((r) => r.id)).toEqual([leadFailedId, recording.runs["petstore-gpu"].meta.id, recording.runs["tracker-1"].meta.id, recording.runs["docs-ollama"].meta.id]);

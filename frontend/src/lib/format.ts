@@ -15,6 +15,16 @@ export function ago(iso: string, now = Date.now()): string {
   return new Date(iso).toLocaleDateString();
 }
 
+/** "in 12m", or "now" once the time has passed. */
+export function until(iso: string, now = Date.now()): string {
+  const s = Math.round((Date.parse(iso) - now) / 1000);
+  if (s <= 0) return "now";
+  if (s < 60) return `in ${s}s`;
+  if (s < 3600) return `in ${Math.floor(s / 60)}m`;
+  if (s < 86400) return `in ${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`;
+  return `in ${Math.floor(s / 86400)}d`;
+}
+
 export const fmtValue = (v: unknown): string => (v === undefined ? "" : typeof v === "string" ? v : JSON.stringify(v));
 
 const AGENT_NAMES = { claude: "Claude", ollama: "Ollama", simulate: "Simulated", diff: "Diff only" } as const;

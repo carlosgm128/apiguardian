@@ -4,6 +4,7 @@ import { StaleServerBanner } from "./components/StaleServerBanner";
 import { ApiDetailPage } from "./pages/ApiDetailPage";
 import { ApisPage } from "./pages/ApisPage";
 import { ApplicationDetailPage, ApplicationsPage } from "./pages/ApplicationsPage";
+import { MonitoringPage } from "./pages/MonitoringPage";
 import { ChannelsPage } from "./pages/ChannelsPage";
 import { ReportsPage } from "./pages/ReportsPage";
 import { NewRunPage } from "./pages/NewRunPage";
@@ -22,7 +23,8 @@ export function App() {
         <button className="brand" onClick={() => navigate()}>
           apiguardian
         </button>
-        <button className={!page ? "nav active" : "nav"} onClick={() => navigate()}>Runs</button>
+        <button className={!page || page === "monitoring" ? "nav active" : "nav"} onClick={() => navigate()}>Monitoring</button>
+        <button className={page === "runs" ? "nav active" : "nav"} onClick={() => navigate("runs")}>Runs</button>
         <button className={page === "new" ? "nav active" : "nav"} onClick={() => navigate("new")}>New run</button>
         <button className={page === "apis" ? "nav active" : "nav"} onClick={() => navigate("apis")}>APIs</button>
         <button className={page === "apps" ? "nav active" : "nav"} onClick={() => navigate("apps")}>Applications</button>
@@ -33,7 +35,7 @@ export function App() {
       {DemoChrome && <Suspense fallback={null}><DemoChrome /></Suspense>}
       <StaleServerBanner />
       <main className="content">
-        {page === "new" ? <NewRunPage /> : page === "system" ? <SystemPage /> : page === "apis" ? (id ? <ApiDetailPage key={id} id={id} /> : <ApisPage />) : page === "apps" ? (id ? <ApplicationDetailPage key={id} id={id} /> : <ApplicationsPage />) : page === "channels" ? <ChannelsPage /> : page === "reports" ? <ReportsPage /> : page === "runs" && id ? <RunPage key={id} runId={id} tab={tab} item={item} /> : <RunsPage />}
+        {page === "new" ? <NewRunPage /> : page === "system" ? <SystemPage /> : page === "apis" ? (id ? <ApiDetailPage key={id} id={id} /> : <ApisPage />) : page === "apps" ? (id ? <ApplicationDetailPage key={id} id={id} /> : <ApplicationsPage />) : page === "channels" ? <ChannelsPage /> : page === "reports" ? <ReportsPage /> : page === "runs" ? (id ? <RunPage key={id} runId={id} tab={tab} item={item} /> : <RunsPage />) : <MonitoringPage />}
       </main>
     </div>
   );

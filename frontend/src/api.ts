@@ -1,4 +1,4 @@
-import type { Application, Channel, CheckRecord, Delivery, Dependency, EndpointStatus, GpuReport, ImpactRecord, RunConfig, RunMeta, Severity, Snapshot, SpecSummary, TrackedApi } from "./types";
+import type { Application, Channel, CheckRecord, MonitoringReport, Delivery, Dependency, EndpointStatus, GpuReport, ImpactRecord, RunConfig, RunMeta, Severity, Snapshot, SpecSummary, TrackedApi } from "./types";
 
 export interface OllamaStatus {
   /** One per Ollama instance; several when agents are pinned to GPUs. */
@@ -110,6 +110,7 @@ export const api = {
     call<RunMeta>(`/api/runs/${encodeURIComponent(id)}/retry`, { method: "POST", body: JSON.stringify(body) }),
   reportMdUrl: (id: string) => `/api/runs/${encodeURIComponent(id)}/report.md`,
   apis: () => call<ApiListItem[]>("/api/apis"),
+  monitoring: (days: number) => call<MonitoringReport>(`/api/monitoring?days=${days}`),
   api: (id: string) => call<ApiDetail>(`/api/apis/${encodeURIComponent(id)}`),
   addApi: (req: NewApiRequest) => call<ApiDetail>("/api/apis", { method: "POST", body: JSON.stringify(req) }),
   updateApi: (id: string, patch: Partial<NewApiRequest> & { enabled?: boolean }) =>

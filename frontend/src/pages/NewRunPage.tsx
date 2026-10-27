@@ -264,7 +264,7 @@ export function NewRunPage() {
 
         {error && <p className="error">{error}</p>}
         <div className="form-actions">
-          <button type="button" className="btn" onClick={() => navigate()}>Cancel</button>
+          <button type="button" className="btn" onClick={() => navigate("runs")}>Cancel</button>
           <button type="submit" className="btn primary" disabled={!ready || !placementOk || submitting}>{submitting ? "Starting…" : "Start run"}</button>
         </div>
       </form>

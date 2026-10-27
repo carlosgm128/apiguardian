@@ -202,6 +202,12 @@ export async function startDashboardServer(manager: RunManager, options: Dashboa
         throw error instanceof UnknownApiError ? new HttpError(404, error.message) : error;
       }
     }
+    // /api/monitoring?days=7: check history and schedule across tracked APIs (Monitoring page).
+    if (parts[1] === "monitoring" && method === "GET") {
+      if (!options.tracker) throw new HttpError(404, "API tracking is not enabled on this server");
+      const days = Math.min(90, Math.max(1, Math.floor(Number(url.searchParams.get("days") ?? 7)) || 7));
+      return sendJson(res, 200, await options.tracker.monitoring(days));
+    }
     if (parts[1] === "apis") return handleApis(req, res, parts.slice(2), method);
     if (["apps", "channels", "deliveries", "reports"].includes(parts[1]!)) return handleApps(req, res, parts.slice(1), method, url);
     if (parts[1] !== "runs") throw new HttpError(404, "Not found");

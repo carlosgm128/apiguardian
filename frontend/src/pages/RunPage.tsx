@@ -75,7 +75,7 @@ export function RunPage({ runId, tab: rawTab, item }: { runId: string; tab?: str
     <div className="stack-lg">
       <header className="run-head">
         <div className="run-title">
-          <button className="btn-link" onClick={() => navigate()}>← Runs</button>
+          <button className="btn-link" onClick={() => navigate("runs")}>← Runs</button>
           <h1 className="mono">{meta ? `${meta.baselineName} → ${meta.candidateName}` : runId}</h1>
         </div>
         <div className="run-meta">

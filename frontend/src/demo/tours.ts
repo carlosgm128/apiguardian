@@ -114,6 +114,12 @@ export const TOURS: Tour[] = [
         go: (s) => run(s.latestRun((m) => m.origin?.trigger === "check" && m.origin.toSnapshot.startsWith("0003"))),
         target: "Overview",
       },
+      {
+        title: "Monitoring",
+        body: "The home page follows every scheduled check: what's due next, checks per day (note the short outage a few days ago), and a check log where your new version links to its report.",
+        go: () => "/",
+        target: "Checks per day",
+      },
     ],
   },
   {

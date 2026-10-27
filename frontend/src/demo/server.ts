@@ -6,7 +6,7 @@
 import type { Operation, RetryInfo, StartRunRequest } from "../api";
 import { operationKey } from "../lib/operations";
 import type { CheckRecord, Delivery, Dependency, EndpointStatus, GpuInfo, ImpactRecord, RunConfig, RunEvent, RunMeta, Severity, Snapshot, TrackedApi } from "../types";
-import { computeImpact, meetsSeverity, reportCsv, reportMarkdown, summarize } from "./mirror";
+import { computeImpact, meetsSeverity, reportCsv, reportMarkdown, summarize, summarizeMonitoring } from "./mirror";
 import type { Application, Channel, ComparisonReport, DemoRecording, DemoSeed, RecordedRun, RecordingRole, VersionRef } from "./types";
 
 export interface DemoResponse {
@@ -183,6 +183,12 @@ export class DemoServer {
         return { status: 200, text: run.markdown, contentType: "text/markdown", filename: `${run.meta.id}-report.md` };
       }
       throw new HttpError(404, "Not found");
+    }
+
+    if (kind === "monitoring" && method === "GET") {
+      const days = Math.min(90, Math.max(1, Math.floor(Number(url.searchParams.get("days") ?? 7)) || 7));
+      const inputs = [...this.apis.values()].map((s) => ({ api: redactApi(s.api), versions: s.versions.length, checks: [...s.checks].reverse() }));
+      return ok(summarizeMonitoring(inputs, { now: this.now(), days, limit: 200, scheduler: { running: true, tickMs: 30_000 } }));
     }
 
     if (kind === "apis") {
@@ -525,16 +531,27 @@ export class DemoServer {
     v1.fetchedAt = new Date(at1).toISOString();
     v2.fetchedAt = new Date(at2).toISOString();
     const [c1, c2] = recorded.checks;
-    const checks = [
-      { ...c1!, at: v1.fetchedAt },
-      { ...c2!, at: v2.fetchedAt },
-    ];
+    // Hourly scheduled checks between and after the two recorded versions, so the
+    // Monitoring page has a realistic history, with a short outage 3 days ago.
+    const last = now - 20 * 60_000;
+    const outage = [now - 3 * DAY - 2 * HOUR, now - 3 * DAY + HOUR];
+    const checks: CheckRecord[] = [{ ...c1!, at: v1.fetchedAt }, { ...c2!, at: v2.fetchedAt, trigger: "schedule" }];
+    for (let t = at1 + HOUR, i = 0; t <= last; t += HOUR, i++) {
+      if (Math.abs(t - at2) < HOUR / 2) continue;
+      const at = new Date(t).toISOString();
+      checks.push(
+        t >= outage[0]! && t <= outage[1]!
+          ? { at, outcome: "error", durationMs: 20_000, trigger: "schedule", error: "Spec fetch timed out after 20s" }
+          : { at, outcome: "unchanged", durationMs: 9 + ((i * 7) % 11), trigger: "schedule", status: 200, snapshotId: t < at2 ? v1.id : v2.id },
+      );
+    }
+    checks.sort((x, y) => x.at.localeCompare(y.at));
     const tracker1 = this.preload("tracker-1", at2);
     const api: TrackedApi = {
       ...recorded.api,
       createdAt: v1.fetchedAt,
-      lastCheckedAt: v2.fetchedAt,
-      lastOutcome: "changed",
+      lastCheckedAt: checks.at(-1)!.at,
+      lastOutcome: checks.at(-1)!.outcome,
       nextCheckAt: new Date(now + 40 * 60_000).toISOString(),
     };
     v2.runId = tracker1.meta.id;

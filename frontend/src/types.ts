@@ -5,7 +5,7 @@ export type { RiskReport, UnitAnalysis } from "../../backend/src/agents/schemas.
 export type { Change, Severity, WorkUnit } from "../../backend/src/types.js";
 export type { EndpointStatus, LoadedModel } from "../../backend/src/compute/endpoints.js";
 export type { GpuInfo, GpuReport } from "../../backend/src/compute/gpus.js";
-export type { CheckRecord, Snapshot, TrackedApi } from "../../backend/src/history/tracker.js";
+export type { CheckRecord, MonitoringApi, MonitoringCheck, MonitoringReport, Snapshot, TrackedApi } from "../../backend/src/history/tracker.js";
 export type { SpecSummary } from "../../backend/src/history/spec.js";
 export type { Application, Channel, ChannelType, Delivery, Dependency, ImpactRecord } from "../../backend/src/apps/types.js";
 

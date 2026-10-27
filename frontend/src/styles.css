@@ -303,6 +303,7 @@ legend { font-weight: 650; margin-bottom: 8px; padding: 0; }
 
 /* Applications, channels, reports */
 .topbar { overflow-x: auto; }
+.topbar .nav, .topbar .brand { flex: none; white-space: nowrap; }
 .dep-row { display: flex; gap: 8px; align-items: center; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-2); flex-wrap: wrap; }
 .dep-editor { border: 1px solid var(--accent); border-radius: 8px; padding: 12px; background: var(--surface-2); }
 .dep-editor label, .dep-editor .label { display: grid; gap: 4px; font-size: 13px; color: var(--ink-2); }
@@ -339,3 +340,21 @@ legend { font-weight: 650; margin-bottom: 8px; padding: 0; }
 .summary-apps { display: grid; gap: 8px; border-top: 1px solid var(--border); }
 .app-impacts { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .app-impacts li { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+/* Monitoring: checks per day, stacked by outcome. Unchanged is the recessive neutral;
+   new versions use the accent; failures are hatched so they never rely on color. */
+.mon-chart { padding: 4px 0 12px; }
+.mon-plot { position: relative; display: flex; align-items: flex-end; gap: 2px; height: 160px; margin: 0 16px; border-bottom: 1px solid var(--axis); }
+.mon-col { position: relative; flex: 1 1 0; min-width: 0; height: 100%; display: flex; align-items: flex-end; justify-content: center; outline: none; }
+.mon-col.hover, .mon-col:focus-visible { background: var(--surface-2); }
+.mon-stack { display: flex; flex-direction: column; gap: 2px; width: min(70%, 28px); min-height: 0; }
+.mon-seg { min-height: 3px; flex-basis: 0; }
+.mon-seg:first-child { border-radius: 4px 4px 0 0; }
+.seg-unchanged, .sw-unchanged { background: var(--muted); }
+.seg-changed { background: var(--accent); }
+.seg-error { background: repeating-linear-gradient(135deg, var(--critical) 0 3px, color-mix(in srgb, var(--critical) 45%, var(--surface)) 3px 6px); }
+.mon-tip { position: absolute; bottom: calc(100% + 6px); left: 50%; z-index: 5; min-width: 130px; padding: 6px 9px; font-size: 12px; line-height: 1.5; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12); pointer-events: none; }
+.mon-col .mon-tip { bottom: auto; top: 4px; left: calc(50% + 10px); }
+.mon-col .mon-tip.left { left: auto; right: calc(50% + 10px); }
+.mon-axis { display: flex; gap: 2px; margin: 4px 16px 6px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.mon-axis span { flex: 1 1 0; min-width: 0; text-align: center; white-space: nowrap; overflow: visible; }

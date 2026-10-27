@@ -156,6 +156,40 @@ describe("ApiTracker", () => {
     expect(await t.tick()).toHaveLength(0);
   });
 
+  it("summarizes checks and the schedule across APIs for monitoring", async () => {
+    const t = await tracker().init();
+    const { api: hourly } = await t.add({ url: api.url, name: "Hourly", intervalMinutes: 60 });
+    await t.add({ url: api.url, name: "Manual", intervalMinutes: 0 });
+    clock += 61 * 60_000;
+    await t.tick(); // unchanged
+    api.spec = V2;
+    clock += 61 * 60_000;
+    await t.tick(); // changed
+    api.status = 503;
+    clock += 2 * 86_400_000; // two days later, outside a 1-day window
+    await t.check(hourly.id);
+
+    const week = await t.monitoring(7);
+    expect(week.scheduler).toEqual({ running: false, tickMs: undefined });
+    expect(week.daily).toHaveLength(7);
+    expect(week.daily.at(-1)!.day).toBe("2026-10-22");
+    expect(week.totalChecks).toBe(5);
+    expect(week.checks[0]).toMatchObject({ apiName: "Hourly", outcome: "error", status: 503 });
+    const h = week.apis.find((a) => a.name === "Hourly")!;
+    expect(h).toMatchObject({ versions: 2, lastOutcome: "error", lastChangeAt: "2026-10-20T12:02:00.000Z", stats: { checks: 4, baseline: 1, unchanged: 1, changed: 1, error: 1 } });
+    expect(h).not.toHaveProperty("headers");
+    expect(week.daily.find((d) => d.day === "2026-10-20")).toMatchObject({ baseline: 2, unchanged: 1, changed: 1, error: 0 });
+
+    const today = await t.monitoring(1, 1);
+    expect(today.totalChecks).toBe(1);
+    expect(today.checks).toHaveLength(1);
+    expect(today.apis.find((a) => a.name === "Manual")!.stats.checks).toBe(0);
+
+    t.startScheduler(60_000);
+    expect((await t.monitoring()).scheduler).toEqual({ running: true, tickMs: 60_000 });
+    t.stopScheduler();
+  });
+
   it("keeps stored header values when the UI sends back redacted ones", async () => {
     const t = await tracker().init();
     const { api: tracked } = await t.add({ url: api.url, headers: { Authorization: "Bearer one" } });
@@ -233,5 +267,14 @@ describe("tracked API routes", () => {
     expect((await call("/api/apis", "POST", { url: "ftp://x" })).status).toBe(422);
     expect((await call("/api/apis", "POST", { url: api.url, headers: { "bad header": "x" } })).status).toBe(400);
     expect((await call("/api/apis/nope")).status).toBe(404);
+  });
+
+  it("serves the monitoring summary", async () => {
+    await call("/api/apis", "POST", { url: api.url, intervalMinutes: 0 });
+    const res = await call("/api/monitoring?days=500");
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.windowDays).toBe(90);
+    expect(body.checks).toEqual([expect.objectContaining({ outcome: "baseline", trigger: "created" })]);
   });
 });
