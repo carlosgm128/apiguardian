@@ -103,7 +103,7 @@ Useful options:
 apiguardian serve          # http://127.0.0.1:4319
 ```
 
-- **Monitoring** (home page): the scheduled checks across all tracked APIs. Shows what is due next, checks per day (unchanged, new version, failed), per-API stats and a filterable check log (see [Monitoring](#monitoring)).
+- **Monitoring** (the home page; click the **apiguardian** logo to get back to it): the scheduled checks across all tracked APIs. Shows what is due next, checks per day (unchanged, new version, failed), per-API stats and a filterable check log (see [Monitoring](#monitoring)).
 - **Runs:** every run with its status, mode, duration, breaking-change count, LLM calls, tokens and estimated cost.
 - **New run:** use a sample or upload two files, then pick the agents, models, effort, concurrency and GPU placement. Running runs can be cancelled.
 - **Run view:**
@@ -182,7 +182,7 @@ Checks run while `apiguardian serve` is running. If the server isn't always up, 
 
 ### Monitoring
 
-The **Monitoring** page is the dashboard's home page. It shows the recurring checks of every tracked API in one place. It refreshes every 10 seconds.
+The **Monitoring** page is the dashboard's home page, and the **apiguardian** logo leads back to it. It shows the recurring checks of every tracked API in one place. It refreshes every 10 seconds.
 
 - **Overview:** tracked and paused APIs, checks and new versions in the chosen window (today, 7, 30 or 90 days), failed checks with the failure rate, and the next scheduled check.
 - **Checks per day:** a bar per day (UTC), split into unchanged, new version and failed. Failed checks are also hatched. Hover a bar for its numbers.

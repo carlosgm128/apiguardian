@@ -20,10 +20,9 @@ export function App() {
   return (
     <div className="app">
       <nav className="topbar">
-        <button className="brand" onClick={() => navigate()}>
+        <button className="brand" onClick={() => navigate()} title="Monitoring (home)" aria-label="apiguardian: Monitoring (home)">
           apiguardian
         </button>
-        <button className={!page || page === "monitoring" ? "nav active" : "nav"} onClick={() => navigate()}>Monitoring</button>
         <button className={page === "runs" ? "nav active" : "nav"} onClick={() => navigate("runs")}>Runs</button>
         <button className={page === "new" ? "nav active" : "nav"} onClick={() => navigate("new")}>New run</button>
         <button className={page === "apis" ? "nav active" : "nav"} onClick={() => navigate("apis")}>APIs</button>

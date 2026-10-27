@@ -116,7 +116,7 @@ export const TOURS: Tour[] = [
       },
       {
         title: "Monitoring",
-        body: "The home page follows every scheduled check: what's due next, checks per day (note the short outage a few days ago), and a check log where your new version links to its report.",
+        body: "The home page (click the apiguardian logo to get back to it) follows every scheduled check: what's due next, checks per day (note the short outage a few days ago), and a check log where your new version links to its report.",
         go: () => "/",
         target: "Checks per day",
       },
