@@ -155,6 +155,8 @@ Everything else works too: create applications and channels, rerun any run, comp
 - **From Git:** import the repository in Vercel and leave the project settings at their defaults (root directory `./`); `vercel.json` sets the rest.
 - **From the CLI:** `npx vercel` for a preview, `npx vercel --prod` for production.
 
+**SEO:** the demo is indexable, with a description, Open Graph and Twitter cards, a 1200×630 preview image (`frontend/public/og-image.png`), JSON-LD, and static fallback content for crawlers that don't run JavaScript. The canonical URL, absolute `og:image`, `robots.txt` sitemap line and `sitemap.xml` need the site's address. On Vercel it's read from the production domain automatically; elsewhere, build with `SITE_URL=https://your.domain npm run build:demo`. The real dashboard build is marked `noindex`.
+
 Only the demo is deployed. The real dashboard needs `apiguardian serve`, which only accepts loopback connections.
 
 The recordings live in `frontend/src/demo/recording.json`. To refresh them with your own runs, put the run directories (from `serve`'s runs dir, or from `compare --out`) and a tracked API directory in one folder, as described at the top of `backend/scripts/export-demo.ts`, then run `npm run demo:export -- <folder>`.

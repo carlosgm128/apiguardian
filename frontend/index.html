@@ -3,10 +3,73 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>apiguardian dashboard</title>
+    <title>API Guardian: AI agents that catch breaking API changes</title>
+    <meta name="description" content="API Guardian compares two versions of your OpenAPI, Swagger or Markdown API docs, explains what changed, and uses AI agents (Claude or local Ollama models) to list what could break for your clients. Try the live demo in your browser." />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="author" content="carlosgm128" />
+    <meta name="application-name" content="API Guardian" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)" />
+
+    <!-- Social previews. Absolute og:url, og:image and the canonical link are added at build time when the site URL is known (vite.config.ts). -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="API Guardian" />
+    <meta property="og:title" content="API Guardian: AI agents that catch breaking API changes" />
+    <meta property="og:description" content="Compare two versions of your API docs, see what changed, and get a ranked list of what could break, from AI agents running on Claude or local Ollama models." />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="API Guardian: AI agents that catch breaking API changes" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="API Guardian: AI agents that catch breaking API changes" />
+    <meta name="twitter:description" content="Compare API doc versions, see what changed, and get a ranked list of what could break for your clients." />
+
+    <!-- Icons live in public/, which Vite copies into both builds. -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "API Guardian",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web, Linux, macOS, Windows",
+        "description": "Compares two versions of an API's documentation (OpenAPI 3.x, Swagger 2.0 or Markdown), reports what changed and how, and uses AI agents to list what could fail for clients. Tracks live APIs, notifies affected applications on Slack, Teams, Discord, webhooks and CI pipelines, and runs on Claude or local Ollama models.",
+        "featureList": [
+          "Deterministic OpenAPI, Swagger and Markdown diff",
+          "Breaking change detection from the client's point of view",
+          "AI worker and lead agents on Claude or Ollama",
+          "Live API tracking with version history",
+          "Slack, Teams, Discord, webhook, GitHub and GitLab notifications",
+          "Multi-GPU agent placement"
+        ],
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "carlosgm128" }
+      }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Static content for crawlers and link previews that don't run JavaScript; React replaces it on load. -->
+    <div id="root">
+      <main style="max-width: 720px; margin: 64px auto; padding: 0 16px; font-family: system-ui, sans-serif; line-height: 1.55">
+        <h1>API Guardian</h1>
+        <p><strong>AI agents that catch breaking API changes before your clients do.</strong></p>
+        <p>API Guardian compares two versions of an API's documentation (OpenAPI 3.x, Swagger 2.0 or Markdown) and reports what changed, how it changed, and what could fail for clients built against the older version.</p>
+        <h2>Features</h2>
+        <ul>
+          <li>A deterministic diff first: severity is judged from the client's side, so stricter requests and looser responses count as breaking.</li>
+          <li>One AI worker agent per changed endpoint, and a lead agent that ranks what could fail, on Claude or local Ollama models.</li>
+          <li>Live API tracking: every new version of a spec URL is snapshotted and reported, with a monitoring dashboard for scheduled checks.</li>
+          <li>Impact per application, with notifications to Slack, Microsoft Teams, Discord, webhooks, GitHub and GitLab pipelines.</li>
+          <li>Reruns with a different model, multi-GPU agent placement, and full inference observability.</li>
+        </ul>
+        <p>This page is an interactive demo that runs entirely in your browser from recorded runs. It needs JavaScript.</p>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

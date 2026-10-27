@@ -20,8 +20,9 @@ export function App() {
   return (
     <div className="app">
       <nav className="topbar">
-        <button className="brand" onClick={() => navigate()} title="Monitoring (home)" aria-label="apiguardian: Monitoring (home)">
-          apiguardian
+        <button className="brand" onClick={() => navigate()} title="DASHBOARD" aria-label="API Guardian: DASHBOARD">
+          <img className="brand-logo" src={`${import.meta.env.BASE_URL}favicon-96x96.png`} alt="" width={24} height={24} />
+          API GUARDIAN
         </button>
         <button className={page === "runs" ? "nav active" : "nav"} onClick={() => navigate("runs")}>Runs</button>
         <button className={page === "new" ? "nav active" : "nav"} onClick={() => navigate("new")}>New run</button>

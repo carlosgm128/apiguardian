@@ -75,7 +75,8 @@ h4 { font-size: 12px; margin: 4px 0 0; color: var(--ink-2); }
 
 /* Shell */
 .topbar { display: flex; align-items: center; gap: 4px; padding: 0 16px; height: 48px; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 5; }
-.brand { font-weight: 750; letter-spacing: -0.01em; background: none; border: 0; padding: 0 12px 0 0; cursor: pointer; font-size: 15px; }
+.brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 750; letter-spacing: -0.01em; background: none; border: 0; padding: 0 12px 0 0; cursor: pointer; font-size: 15px; color: var(--ink); }
+.brand-logo { display: block; width: 24px; height: 24px; border-radius: 5px; }
 .nav { background: none; border: 0; padding: 6px 10px; border-radius: 6px; cursor: pointer; color: var(--ink-2); }
 .nav:hover { background: var(--surface-2); }
 .nav.active { color: var(--ink); background: var(--surface-2); font-weight: 600; }
