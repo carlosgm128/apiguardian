@@ -14,6 +14,8 @@ import { SystemPage } from "./pages/SystemPage";
 
 // Banner and guided tours, only in the demo build.
 const DemoChrome = import.meta.env.MODE === "demo" ? lazy(() => import("./demo/DemoChrome")) : null;
+// Vercel Web Analytics, only in the hosted demo: the local dashboard never reports anything.
+const DemoAnalytics = import.meta.env.MODE === "demo" ? lazy(() => import("./demo/DemoAnalytics")) : null;
 
 export function App() {
   const [page, id, tab, item] = useRoute();
@@ -33,6 +35,7 @@ export function App() {
         <button className={page === "system" ? "nav active" : "nav"} onClick={() => navigate("system")}>System</button>
       </nav>
       {DemoChrome && <Suspense fallback={null}><DemoChrome /></Suspense>}
+      {DemoAnalytics && <Suspense fallback={null}><DemoAnalytics /></Suspense>}
       <StaleServerBanner />
       <main className="content">
         {page === "new" ? <NewRunPage /> : page === "system" ? <SystemPage /> : page === "apis" ? (id ? <ApiDetailPage key={id} id={id} /> : <ApisPage />) : page === "apps" ? (id ? <ApplicationDetailPage key={id} id={id} /> : <ApplicationsPage />) : page === "channels" ? <ChannelsPage /> : page === "reports" ? <ReportsPage /> : page === "runs" ? (id ? <RunPage key={id} runId={id} tab={tab} item={item} /> : <RunsPage />) : <MonitoringPage />}

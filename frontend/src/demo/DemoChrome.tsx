@@ -43,7 +43,7 @@ export default function DemoChrome() {
       <div className="demo-banner" role="status">
         <span className="demo-badge">Demo</span>
         <span className="demo-long">
-          Everything runs in your browser from recorded runs of real local models, replayed faster. Nothing is sent anywhere. Reload to reset.
+          Everything runs in your browser from recorded runs of real local models, replayed faster. Your actions stay in your browser; only anonymous page views are counted. Reload to reset.
         </span>
         <span className="demo-short">Recorded runs, replayed in your browser.</span>
         <span className="spacer" />

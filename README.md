@@ -131,7 +131,7 @@ The server only listens on 127.0.0.1, and it rejects requests from other sites, 
 
 ## Demo
 
-A server-free build of the dashboard, for showing apiguardian to someone. Everything runs in the browser from recorded runs of real local models (qwen3.5 on Ollama), replayed in compressed time. No server, API key or GPU is needed, and nothing is sent anywhere.
+A server-free build of the dashboard, for showing apiguardian to someone. Everything runs in the browser from recorded runs of real local models (qwen3.5 on Ollama), replayed in compressed time. No server, API key or GPU is needed, and nothing you do is sent anywhere. The hosted demo counts anonymous, cookieless page views with Vercel Web Analytics; the local dashboard never does.
 
 ```bash
 npm run build:demo     # static site in dist/demo; host it anywhere (it uses relative paths)
@@ -156,6 +156,8 @@ Everything else works too: create applications and channels, rerun any run, comp
 - **From the CLI:** `npx vercel` for a preview, `npx vercel --prod` for production.
 
 **SEO:** the demo is indexable, with a description, Open Graph and Twitter cards, a 1200×630 preview image (`frontend/public/og-image.png`), JSON-LD, and static fallback content for crawlers that don't run JavaScript. The canonical URL, absolute `og:image`, `robots.txt` sitemap line and `sitemap.xml` need the site's address. On Vercel it's read from the production domain automatically; elsewhere, build with `SITE_URL=https://your.domain npm run build:demo`. The real dashboard build is marked `noindex`.
+
+**Analytics:** the demo build includes Vercel Web Analytics (`frontend/src/demo/DemoAnalytics.tsx`). Turn it on in the Vercel project under **Analytics**. Page views are reported per dashboard page, with ids replaced (`/runs/[id]/inference/[item]`). It's only in the demo bundle, never in `dist/web`.
 
 Only the demo is deployed. The real dashboard needs `apiguardian serve`, which only accepts loopback connections.
 
